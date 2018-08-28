@@ -9,86 +9,73 @@ public class ClickToMoveAI : MonoBehaviour
     public LayerMask raycastLayers;
     public LayerMask floorOnly;
     private Vector3 destination;
+    Vector3 playerPos;
     public float rayDistance = .1f;
-    public float radiusOfSat = .3f;
+    
+
     //in case we hit
     private bool hitThisFrame = false;
     private Vector3 rayCollisionNormal;
     private Vector3 hitLocThisFrame = Vector3.zero;
 
+    //pathfinding stuffs
+    public List<Vector3> clickedList = new List<Vector3>();
 
-    //grid stuff
-    int rows = 3;
-    int cols = 3;
-    Transform[,] grid;
-    
     // Use this for initialization
     void Start()
     {
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hitInfo;
         hitThisFrame = false;
         float step = moveSpeed * Time.deltaTime;
-        Vector3 playerPos = playerModel.transform.position;
-
-        //move based on mouse click
+        Ray intoScreen = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+        playerPos = playerModel.transform.position;
+        //add mouse click spot to list of spots to travel along
         if (Input.GetMouseButtonDown(0))
         {
-            Ray intoScreen = Camera.main.ScreenPointToRay(Input.mousePosition); // hits whatever is under mouse at the time 
+            //Ray intoScreen = Camera.main.ScreenPointToRay(Input.mousePosition); // hits whatever is under mouse at the time 
             if (Physics.Raycast(intoScreen, out hitInfo, 1000, floorOnly))
             {
                 print("raycast hit " + hitInfo.transform.name + " at " + hitInfo.point);
-                //destination = hitInfo.point;
                 if (hitInfo.transform.tag == "Tile")
                 {
                     destination.x = hitInfo.transform.position.x;
                     destination.z = hitInfo.transform.position.z;
+                    clickedList.Add(destination);
                 }
-                //rayCollisionNormal = hitInfo.normal;
             }
         }
-       
-
-        //move the player toward the destination
-        if (Vector3.Distance(playerPos, destination) > rayDistance)
+        
+        //dijkstra stuff??
+        if (Input.GetMouseButtonDown(1))
         {
-            transform.position = Vector3.MoveTowards(playerModel.transform.position, destination, step);
-            /*if (Vector3.Distance(playerPos, destination) > radiusOfSat)
+            if(Physics.Raycast(intoScreen, out hitInfo, 1000, floorOnly))
             {
-                //if playerpos.x  is same as destination.x, and z is different
-                if (playerPos.x == destination.x && playerPos.z != destination.z)
-                {
-                    //if des.z is > playerpos.z, move up
-                    if (destination.z > playerPos.z)
-                    {
-                        playerPos.z += .1f;
-                    }
-                    //if des.z is < playerpos.z, move down
-                    if (destination.z < playerPos.z)
-                    {
-                        playerPos.z -= .1f;
-                    }
-                }
-
-                //if playerpos.z is same as destination.z and x is different
-                if (playerPos.z == destination.z && playerPos.x != destination.x)
-                {
-                    //if des.x is > playerpos.x, move right
-                    if (destination.x > playerPos.x)
-                    {
-                        playerPos.x += .1f;
-                    }
-                    //if des.x is < playerpos.x, move left
-                    if (destination.x < playerPos.x)
-                    {
-                        playerPos.x -= .1f;
-                    }
-                }
-            }*/
+                Vector3 endNode = hitInfo.point;
+                print("final spot: " + endNode);
+            }
         }
+
+        //move along path
+        if (clickedList.Count > 0 && Input.GetKey(KeyCode.Space))
+        {
+            transform.position = Vector3.MoveTowards(playerPos, clickedList[0], step);
+            if (Vector3.Distance(playerPos, clickedList[0]) < rayDistance)
+            {
+                clickedList.Remove(clickedList[0]);
+            }
+        }
+
     }
+
+    public void DijkstraTest1(Vector3 startNode, Vector3 endNode)
+    {
+
+    }
+    
 }
