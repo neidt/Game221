@@ -70,7 +70,6 @@ public class ClickToMoveAI : MonoBehaviour
                 clickedList.Remove(clickedList[0]);
             }
         }
-
     }
 
     public void DijkstraTest1(Vector3 startNode, Vector3 endNode)

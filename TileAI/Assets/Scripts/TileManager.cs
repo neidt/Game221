@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
 {
-    public Node tileNode = new Node();
+    
     public Transform moveLoc;
     public ClickToMoveAI AI;
-
+   
+    public int graphsize;
 	// Use this for initialization
 	void Start ()
     {
         AI = GameObject.FindGameObjectWithTag("Player").GetComponent<ClickToMoveAI>();
-        tileNode.tile = this.gameObject;
+        
 	}
 
     public void Awake()
@@ -25,9 +26,9 @@ public class TileManager : MonoBehaviour
                 tilePos == this.transform.position + Vector3.right ||
                 tilePos == this.transform.position + Vector3.left)
             {
-                tileNode.connectionsList.Add(tile.GetComponent<TileManager>().tileNode, 1);
             }
         }
+        
     }
 
     // Update is called once per frame
