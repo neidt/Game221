@@ -55,9 +55,18 @@ public class DijkstraImplementation
                     }
                 }
             }
+            closedList.Add(smallestCostSoFar);
+            openList.Remove(smallestCostSoFar);
         }//end while loop -pathfinding done
 
         //todoL: fill out waypoints
+        //destination is on closed list
+        //[predessocrs olao on closed list
+        for(PathFindingNode waypoint = pathfindingNodes[toNode]; waypoint!= null; waypoint = waypoint.predecessor)
+        {
+            waypoints.Add(waypoint.graphNode.position);
+        }
+        waypoints.Reverse();
 
         return waypoints;
     }//end pathfind
