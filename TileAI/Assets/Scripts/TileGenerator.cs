@@ -7,7 +7,7 @@ public class TileGenerator : MonoBehaviour
     public int gridHeight = 5;
     public int gridWidth = 5;
     public GameObject tile;
-    Quaternion tileRotation;
+    public GameObject player;
     Vector3 startSpot;
 
 
@@ -15,18 +15,20 @@ public class TileGenerator : MonoBehaviour
     void Start()
     {
         tile = GameObject.FindGameObjectWithTag("Tile");
-        tileRotation = new Quaternion(0, 0, 0, 0);
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     //awake stuff?? make stuff???
     public void Awake()
     {
+        //generate player
+        GameObject playerObj = Instantiate(player, new Vector3(0, 0, 0),this.transform.rotation);
         //generate graph
         for (int z = 0; z < gridHeight; z++)
         {
             for (int x = 0; x < gridWidth; x++)
             {
-                Instantiate(tile, new Vector3(x, 2, z),tileRotation);
+                GameObject tileobj = Instantiate(tile, new Vector3(x, 0, z), this.transform.rotation);
             }
         }
     }
