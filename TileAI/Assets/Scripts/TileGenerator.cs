@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class TileGenerator : MonoBehaviour
 {
-    public int graphSize;
+    public int gridHeight = 5;
+    public int gridWidth = 5;
     public GameObject tile;
-    public GameObject obstacle;
+    Quaternion tileRotation;
     Vector3 startSpot;
 
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         tile = GameObject.FindGameObjectWithTag("Tile");
-	}
+        tileRotation = new Quaternion(0, 0, 0, 0);
+    }
 
     //awake stuff?? make stuff???
     public void Awake()
     {
         //generate graph
-        for (int i = 0; i < graphSize; i++)
+        for (int z = 0; z < gridHeight; z++)
         {
-            //make the grid
+            for (int x = 0; x < gridWidth; x++)
+            {
+                Instantiate(tile, new Vector3(x, 2, z),tileRotation);
+            }
         }
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
-		
-	}
+
+    }
 }
