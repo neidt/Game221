@@ -25,13 +25,13 @@ public class DijkstraImplementation
             PathFindingNode smallestCostSoFar = openList[0];
 
             //how do we get connections?
-            foreach (Node connectedNode in smallestCostSoFar.graphNode.connections.Keys)
+            foreach (Node connectedNode in smallestCostSoFar.graphNode.weightedConnections.Keys)
             {
                 if (!DoesListContainNode(connectedNode, closedList))
                 {
                     if (!DoesListContainNode(connectedNode, openList))
                     {
-                        float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.connections[connectedNode];
+                        float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
                         PathFindingNode predecessor = smallestCostSoFar;
 
                         pathfindingNodes.Add(connectedNode, new PathFindingNode(connectedNode, costToConnectedNode, predecessor));
@@ -43,7 +43,7 @@ public class DijkstraImplementation
                         //than the exitsting connection the this target node?
                         //if yes, update target node
                         float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
-                        float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.connections[connectedNode];
+                        float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
 
                         if (costToTargetThroughCurrentNode < currentCostToTarget)
                         {
@@ -118,6 +118,10 @@ public class TileGraph
 
 public class Node
 {
+    public Node(Vector3 pos)
+    {
+        this.position = pos;
+    }
     public Vector3 position;
-    public Dictionary<Node, float> connections = new Dictionary<Node, float>();
+    public Dictionary<Node, float> weightedConnections = new Dictionary<Node, float>();
 }//end class

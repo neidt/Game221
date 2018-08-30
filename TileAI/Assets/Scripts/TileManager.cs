@@ -7,7 +7,7 @@ public class TileManager : MonoBehaviour
 
     //public Transform moveLoc;
     public ClickToMoveAI AI;
-    public Node tileNode = new Node();
+    //public Node tileNode = new Node();
     public int graphsize;
     // Use this for initialization
     void Start()

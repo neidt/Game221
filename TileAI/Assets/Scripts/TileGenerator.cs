@@ -34,10 +34,10 @@ public class TileGenerator : MonoBehaviour
                 GameObject tileobj = Instantiate(tile, new Vector3(x, 0, z), this.transform.rotation);
 
                 //Node tileNode = new Node();
-                Node tileNode = tileobj.GetComponent<TileManager>().tileNode;
+                //Node tileNode = tileobj.GetComponent<TileManager>().tileNode;
                 //tileobj.GetComponent<TileManager>().tileNode = tileNode;
-                tileNode.position = tileobj.transform.position;
-                nodeList.Add(tileNode);
+                //tileNode.position = tileobj.transform.position;
+                //nodeList.Add(tileNode);
             }
         }
 
@@ -51,9 +51,10 @@ public class TileGenerator : MonoBehaviour
                 tileNodePos == node.position + Vector3.right ||
                 tileNodePos == node.position + Vector3.left)
                 {
-                    tileNode.connections.Add(node, 1);
+                    tileNode.weightedConnections.Add(node, 1);
                 }
             }
+            ///DijkstraImplementation.Pathfind(tileNode, AI.endNode);
         }
     }
 

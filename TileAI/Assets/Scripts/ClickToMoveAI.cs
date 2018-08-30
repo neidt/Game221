@@ -13,7 +13,7 @@ public class ClickToMoveAI : MonoBehaviour
     public float rayDistance = .1f;
     public Node startNode;
     public Node endNode;
-    
+    TilesByGeneration generatorThing;
 
     //in case we hit
     private bool hitThisFrame = false;
@@ -47,7 +47,7 @@ public class ClickToMoveAI : MonoBehaviour
                 if (hitInfo.transform.tag == "Tile")
                 {
                     
-                    startNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
+                    //startNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
                     print("start point" + startNode);
 
                     //startNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
@@ -68,7 +68,7 @@ public class ClickToMoveAI : MonoBehaviour
             {
                 if (hitInfo.transform.tag == "Tile")
                 {
-                    endNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
+                    //endNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
                     //DijkstraImplementation.Pathfind(startNode, endNode);
                     print("final spot: " + endNode);
                 }
