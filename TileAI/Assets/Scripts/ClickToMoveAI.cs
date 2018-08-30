@@ -11,20 +11,23 @@ public class ClickToMoveAI : MonoBehaviour
     private Vector3 destination;
     Vector3 playerPos;
     public float rayDistance = .1f;
+    public Node startNode;
+    public Node endNode;
     
 
     //in case we hit
     private bool hitThisFrame = false;
-    private Vector3 rayCollisionNormal;
+    // private Vector3 rayCollisionNormal;
     private Vector3 hitLocThisFrame = Vector3.zero;
 
     //pathfinding stuffs
     public List<Vector3> clickedList = new List<Vector3>();
+    public List<Vector3> waypointList;
 
     // Use this for initialization
     void Start()
     {
-       
+        
     }
 
     // Update is called once per frame
@@ -38,15 +41,22 @@ public class ClickToMoveAI : MonoBehaviour
         //add mouse click spot to list of spots to travel along
         if (Input.GetMouseButtonDown(0))
         {
-            //Ray intoScreen = Camera.main.ScreenPointToRay(Input.mousePosition); // hits whatever is under mouse at the time 
             if (Physics.Raycast(intoScreen, out hitInfo, 1000, floorOnly))
             {
-                print("raycast hit " + hitInfo.transform.name + " at " + hitInfo.point);
+                //print("raycast hit " + hitInfo.transform.name + " at " + hitInfo.point);
                 if (hitInfo.transform.tag == "Tile")
                 {
+                    
+                    startNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
+                    print("start point" + startNode);
+
+                    //startNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
+                    /*print("start point" + startNode);
+                    
                     destination.x = hitInfo.transform.position.x;
                     destination.z = hitInfo.transform.position.z;
-                    clickedList.Add(destination);
+                    
+                    clickedList.Add(destination);*/
                 }
             }
         }
@@ -56,8 +66,12 @@ public class ClickToMoveAI : MonoBehaviour
         {
             if(Physics.Raycast(intoScreen, out hitInfo, 1000, floorOnly))
             {
-                Vector3 endNode = hitInfo.point;
-                print("final spot: " + endNode);
+                if (hitInfo.transform.tag == "Tile")
+                {
+                    endNode = hitInfo.transform.GetComponent<TileManager>().tileNode;
+                    //DijkstraImplementation.Pathfind(startNode, endNode);
+                    print("final spot: " + endNode);
+                }
             }
         }
 
@@ -71,10 +85,4 @@ public class ClickToMoveAI : MonoBehaviour
             }
         }
     }
-
-    public void DijkstraTest1(Vector3 startNode, Vector3 endNode)
-    {
-
-    }
-    
 }

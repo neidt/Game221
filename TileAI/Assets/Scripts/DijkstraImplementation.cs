@@ -8,8 +8,6 @@ public class DijkstraImplementation
     {
         List<Vector3> waypoints = new List<Vector3>();
 
-        //todo: do pathfinding algorithm
-
         List<PathFindingNode> openList = new List<PathFindingNode>();
         List<PathFindingNode> closedList = new List<PathFindingNode>();
 
@@ -17,7 +15,7 @@ public class DijkstraImplementation
 
         pathfindingNodes.Add(fromNode, new PathFindingNode(fromNode));
         openList.Add(pathfindingNodes[fromNode]);
-        
+
         while (openList.Count > 0 && !DoesListContainNode(toNode, closedList))
         {
             //todo: find connections from the lowest cost-so-far point to all connected points
@@ -47,7 +45,7 @@ public class DijkstraImplementation
                         float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
                         float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.connections[connectedNode];
 
-                        if(costToTargetThroughCurrentNode < currentCostToTarget)
+                        if (costToTargetThroughCurrentNode < currentCostToTarget)
                         {
                             pathfindingNodes[connectedNode].costSoFar = costToTargetThroughCurrentNode;
                             pathfindingNodes[connectedNode].predecessor = smallestCostSoFar;
@@ -62,7 +60,7 @@ public class DijkstraImplementation
         //todoL: fill out waypoints
         //destination is on closed list
         //[predessocrs olao on closed list
-        for(PathFindingNode waypoint = pathfindingNodes[toNode]; waypoint!= null; waypoint = waypoint.predecessor)
+        for (PathFindingNode waypoint = pathfindingNodes[toNode]; waypoint != null; waypoint = waypoint.predecessor)
         {
             waypoints.Add(waypoint.graphNode.position);
         }
