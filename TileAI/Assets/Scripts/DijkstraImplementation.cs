@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DijkstraImplementation
-{
-    public static List<Vector3> Pathfind(/*TileGraph graph,*/ Node fromNode, Node toNode)
+{ 
+    public static List<Vector3> Pathfind(Node fromNode, Node toNode)
     {
         List<Vector3> waypoints = new List<Vector3>();
 
@@ -18,7 +18,6 @@ public class DijkstraImplementation
 
         while (openList.Count > 0 && !DoesListContainNode(toNode, closedList))
         {
-            //todo: find connections from the lowest cost-so-far point to all connected points
 
             //how do you know what the smallest cost-so-far is? ->
             openList.Sort();
@@ -43,6 +42,9 @@ public class DijkstraImplementation
                         //than the exitsting connection the this target node?
                         //if yes, update target node
                         float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
+
+                        //a* is --> currentCostToTarget = pathfindingNodes[connectedNode].costSoFar + vector3.Distance(current node.pos, endnode.pos)
+
                         float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
 
                         if (costToTargetThroughCurrentNode < currentCostToTarget)
@@ -57,9 +59,9 @@ public class DijkstraImplementation
             openList.Remove(smallestCostSoFar);
         }//end while loop -pathfinding done
 
-        //todoL: fill out waypoints
         //destination is on closed list
         //[predessocrs olao on closed list
+        //Debug.Log("toNode: " + toNode.ToString());
         for (PathFindingNode waypoint = pathfindingNodes[toNode]; waypoint != null; waypoint = waypoint.predecessor)
         {
             waypoints.Add(waypoint.graphNode.position);
@@ -90,6 +92,7 @@ public class PathFindingNode : System.IComparable<PathFindingNode>
 
     //predescor
     public PathFindingNode predecessor;
+
     public int CompareTo(PathFindingNode other)
     {
         return costSoFar.CompareTo(other.costSoFar);
@@ -109,12 +112,6 @@ public class PathFindingNode : System.IComparable<PathFindingNode>
         predecessor = null;
     }//end consturctoir
 }//end class
-
-/*
-public class TileGraph
-{
-    public List<Vector3> points = new List<Vector3>();
-}//end class*/
 
 public class Node
 {

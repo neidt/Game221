@@ -60,7 +60,7 @@ public class TileGenerator : MonoBehaviour
 
     public void SendPosToAI()
     {
-        nodeList[0] = AI.startNode;
+        //nodeList[0] = AI.startNode;
         //AI.clickedList = DijkstraImplementation.Pathfind(AI.startNode,AI.endNode);
     }
 

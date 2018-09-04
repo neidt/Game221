@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class TilesByGeneration : MonoBehaviour
 {
-    public int gridWidth = 10;
-    public int gridHeight = 10;
+    public int gridWidth = 5;
+    public int gridHeight = 5;
 
     public GameObject tileTemplate;
-
+    public GameObject player;
     public Dictionary<GameObject, Node> tilesToNode = new Dictionary<GameObject, Node>();
+    //dubuge
+    public List<GameObject> tiles = new List<GameObject>();
+    public List<Node> nodesList = new List<Node>();
+    //end debug
+
+    //public Node node;
+    ClickToMoveAI playerMoveScript;
+    //public ReportIfClicked clickScript;
 
     // Use this for initialization
     void Start()
     {
         Dictionary<Vector3, Node> nodesByPosition = new Dictionary<Vector3, Node>();
+        GameObject playerObj = Instantiate(player, new Vector3(0, 0, 0), this.transform.rotation);
+
+        playerMoveScript = playerObj.GetComponent<ClickToMoveAI>();
+        //clickScript = tileTemplate.GetComponent<ReportIfClicked>();
 
         for (int x = 0; x < gridWidth; x++)
         {
@@ -22,17 +34,39 @@ public class TilesByGeneration : MonoBehaviour
             {
                 GameObject newTile = GameObject.Instantiate(tileTemplate);
                 newTile.transform.position = new Vector3(x, 0, z);
+                //print("Making tile at: " + newTile.transform.position.ToString());
 
                 Node tileNode = new Node(newTile.transform.position);
+                //print("Making node at: " + tileNode.position.ToString());
                 nodesByPosition.Add(tileNode.position, tileNode);
-
-                //newTile.GetComponent<NodeBinding>().node = tileNode;
                 tilesToNode.Add(newTile, tileNode);
 
+                tiles.Add(newTile);
+                nodesList.Add(tileNode);
+
                 newTile.GetComponent<ReportIfClicked>().generatedTiles = this;
+                /*
+                if (tileNode.position == Vector3.zero)
+                {
+                    playerMoveScript.AIStartNode = tileNode;
+                }*/
             }
         }
 
+        //debug statements
+        foreach (GameObject tile in tiles)
+        {
+            print("tile: " + tile.transform.position.ToString());
+        }
+
+        foreach(Node tileNode in nodesList)
+        {
+            print("node: " + tileNode.position.ToString());
+        }
+
+
+
+        //connections
         foreach (Vector3 nodePosition in nodesByPosition.Keys)
         {
             Node currentNode = nodesByPosition[nodePosition];
