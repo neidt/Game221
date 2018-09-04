@@ -6,6 +6,8 @@ public class DijkstraImplementation
 { 
     public static List<Vector3> Pathfind(Node fromNode, Node toNode)
     {
+        Debug.Log("from node: " + fromNode.weightedConnections.Count);
+        Debug.Log("tonode: " + toNode.weightedConnections.Count);
         List<Vector3> waypoints = new List<Vector3>();
 
         List<PathFindingNode> openList = new List<PathFindingNode>();
@@ -18,21 +20,23 @@ public class DijkstraImplementation
 
         while (openList.Count > 0 && !DoesListContainNode(toNode, closedList))
         {
-
+            Debug.Log("into while loop");
             //how do you know what the smallest cost-so-far is? ->
             openList.Sort();
             PathFindingNode smallestCostSoFar = openList[0];
 
             //how do we get connections?
+            Debug.Log("weighted connections: " + smallestCostSoFar.graphNode.weightedConnections.Count);
             foreach (Node connectedNode in smallestCostSoFar.graphNode.weightedConnections.Keys)
             {
+                Debug.Log("into foreach");
                 if (!DoesListContainNode(connectedNode, closedList))
                 {
                     if (!DoesListContainNode(connectedNode, openList))
                     {
                         float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
                         PathFindingNode predecessor = smallestCostSoFar;
-
+                        Debug.Log("adding node " + connectedNode);
                         pathfindingNodes.Add(connectedNode, new PathFindingNode(connectedNode, costToConnectedNode, predecessor));
                         openList.Add(pathfindingNodes[connectedNode]);
                     }
@@ -62,6 +66,9 @@ public class DijkstraImplementation
         //destination is on closed list
         //[predessocrs olao on closed list
         //Debug.Log("toNode: " + toNode.ToString());
+        if (toNode == null) { Debug.Log("toNode is null."); }
+        Debug.Log("pathfinding nodes count: " +pathfindingNodes.Count);
+
         for (PathFindingNode waypoint = pathfindingNodes[toNode]; waypoint != null; waypoint = waypoint.predecessor)
         {
             waypoints.Add(waypoint.graphNode.position);
@@ -121,4 +128,10 @@ public class Node
     }
     public Vector3 position;
     public Dictionary<Node, float> weightedConnections = new Dictionary<Node, float>();
+    public override string ToString()
+    {
+        return this.position.ToString("F1");
+    }
+
+
 }//end class
