@@ -24,20 +24,26 @@ public class ReportIfClicked : MonoBehaviour
             {
                 if (info.transform == this.transform)
                 {
-                    //print("ray hit at" + info.transform.position.ToString());
-                    //ai.endNode = this.gameObject.GetComponent<Node>();
                     //set node at the transform to the end node??
                     endTile = this.gameObject;
                     ai.endNode = generatedTiles.tilesToNode[endTile];
 
                     print("setting end node to: " + ai.endNode.position);
-                    //waypointList = DijkstraImplementation.Pathfind(ai.AIStartNode, myEndNode);
                 }
             }
         }
-
-
-
+        //if rightclicking, set object to an obstacle
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit info;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out info))
+            {
+                if (info.transform == this.transform)
+                {
+                    
+                }
+            }
+        }
     }
 }
 

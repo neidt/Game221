@@ -7,7 +7,12 @@ public class TilesByGeneration : MonoBehaviour
     public int gridWidth = 5;
     public int gridHeight = 5;
 
+    //tiles
     public GameObject tileTemplate;
+    //public GameObject tileTemplate;
+    public GameObject obstacleTile;
+
+    //other stuff
     public GameObject player;
     public Dictionary<GameObject, Node> tilesToNode = new Dictionary<GameObject, Node>();
     public List<GameObject> tiles = new List<GameObject>();
@@ -31,7 +36,9 @@ public class TilesByGeneration : MonoBehaviour
         {
             for (int z = 0; z < gridHeight; z++)
             {
+
                 GameObject newTile = GameObject.Instantiate(tileTemplate);
+
                 newTile.transform.position = new Vector3(x, 0, z);
 
                 Node tileNode = new Node(newTile.transform.position);
@@ -47,11 +54,6 @@ public class TilesByGeneration : MonoBehaviour
                 nodesList.Add(tileNode);
 
                 newTile.GetComponent<ReportIfClicked>().generatedTiles = this;
-                /*
-                if (tileNode.position == Vector3.zero)
-                {
-                    playerMoveScript.AIStartNode = tileNode;
-                }*/
             }
         }
 
