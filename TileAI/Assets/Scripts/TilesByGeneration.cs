@@ -58,10 +58,10 @@ public class TilesByGeneration : MonoBehaviour
         //connections
         foreach (Vector3 nodePosition in nodesByPosition.Keys)
         {
-            Debug.Log("tile gen nodesBypos: " + nodesByPosition.Count);
+            //Debug.Log("tile gen nodesBypos: " + nodesByPosition.Count);
             Node currentNode = nodesByPosition[nodePosition];
             weightedConnections = currentNode.weightedConnections;
-            Debug.Log("weighted conns: " + weightedConnections.Count);
+            //Debug.Log("weighted conns: " + weightedConnections.Count);
 
             Node right = LookupNode(nodesByPosition, currentNode.position + Vector3.right);
             if (right != null)

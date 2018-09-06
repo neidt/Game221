@@ -20,23 +20,23 @@ public class DijkstraImplementation
 
         while (openList.Count > 0 && !DoesListContainNode(toNode, closedList))
         {
-            Debug.Log("into while loop");
+            //Debug.Log("into while loop");
             //how do you know what the smallest cost-so-far is? ->
             openList.Sort();
             PathFindingNode smallestCostSoFar = openList[0];
 
             //how do we get connections?
-            Debug.Log("weighted connections: " + smallestCostSoFar.graphNode.weightedConnections.Count);
+            //Debug.Log("weighted connections: " + smallestCostSoFar.graphNode.weightedConnections.Count);
             foreach (Node connectedNode in smallestCostSoFar.graphNode.weightedConnections.Keys)
             {
-                Debug.Log("into foreach");
+                //Debug.Log("into foreach");
                 if (!DoesListContainNode(connectedNode, closedList))
                 {
                     if (!DoesListContainNode(connectedNode, openList))
                     {
                         float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
                         PathFindingNode predecessor = smallestCostSoFar;
-                        Debug.Log("adding node " + connectedNode);
+                        //Debug.Log("adding node " + connectedNode);
                         pathfindingNodes.Add(connectedNode, new PathFindingNode(connectedNode, costToConnectedNode, predecessor));
                         openList.Add(pathfindingNodes[connectedNode]);
                     }

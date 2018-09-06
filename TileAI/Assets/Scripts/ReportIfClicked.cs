@@ -24,12 +24,12 @@ public class ReportIfClicked : MonoBehaviour
             {
                 if (info.transform == this.transform)
                 {
-                    print("ray hit at" + info.transform.position.ToString());
+                    //print("ray hit at" + info.transform.position.ToString());
                     //ai.endNode = this.gameObject.GetComponent<Node>();
                     //set node at the transform to the end node??
                     endTile = this.gameObject;
                     ai.endNode = generatedTiles.tilesToNode[endTile];
-                    
+
                     print("setting end node to: " + ai.endNode.position);
                     //waypointList = DijkstraImplementation.Pathfind(ai.AIStartNode, myEndNode);
                 }
@@ -37,7 +37,7 @@ public class ReportIfClicked : MonoBehaviour
         }
 
 
-        
+
     }
 }
 

@@ -30,16 +30,20 @@ public class ClickToMoveAI : MonoBehaviour
     void Start()
     {
         clickedScript = GameObject.FindGameObjectWithTag("Tile").GetComponent<ReportIfClicked>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             DoDijkstra();
+            UpdateAgentMovement();
         }
-        UpdateAgentMovement();
+
+       
+
     }
 
     private void UpdateAgentMovement()
@@ -48,18 +52,18 @@ public class ClickToMoveAI : MonoBehaviour
         //RaycastHit hitInfo;
         playerPos = playerModel.transform.position;
 
-        List<Vector3> listToRemove = new List<Vector3>();
         foreach (Vector3 waypointThing in waypointList)
         {
             print("moving to node: " + waypointThing.ToString());
-            transform.position = Vector3.MoveTowards(playerPos, waypointThing, step);
+            destination.x = waypointThing.x;
+            destination.z = waypointThing.z;
+
+            transform.position = Vector3.MoveTowards(playerPos, destination, step);
             if (Vector3.Distance(playerPos, waypointThing) < rayDistance)
             {
-                listToRemove.Add(waypointThing);
-                //waypointList.Remove(waypointThing);
+                //move to next node
             }
         }
-        waypointList.Remove(listToRemove[0]);
     }
 
     private void DoDijkstra()
@@ -68,5 +72,10 @@ public class ClickToMoveAI : MonoBehaviour
         print("ai connections" + AIStartNode.weightedConnections.Count);
         print("endnode: " + endNode);
         waypointList = DijkstraImplementation.Pathfind(AIStartNode, endNode);
+        waypointList.ToString();
+        foreach (Vector3 waypoint in waypointList)
+        {
+            print("waypoint at: " + waypoint.ToString());
+        }
     }
 }
