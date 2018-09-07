@@ -9,7 +9,6 @@ public class TilesByGeneration : MonoBehaviour
 
     //tiles
     public GameObject tileTemplate;
-    //public GameObject tileTemplate;
     public GameObject obstacleTile;
 
     //other stuff
@@ -21,6 +20,7 @@ public class TilesByGeneration : MonoBehaviour
     public Dictionary<Vector3, Node> nodesByPosition = new Dictionary<Vector3, Node>();
 
     ClickToMoveAI playerMoveScript;
+    ReportIfClicked tileScript;
 
     // Use this for initialization
     void Start()
@@ -29,6 +29,7 @@ public class TilesByGeneration : MonoBehaviour
 
         GameObject playerObj = Instantiate(player, new Vector3(0, 0, 0), this.transform.rotation);
 
+        tileScript = this.gameObject.GetComponent<ReportIfClicked>();
         playerMoveScript = playerObj.GetComponent<ClickToMoveAI>();
         //clickScript = tileTemplate.GetComponent<ReportIfClicked>();
 

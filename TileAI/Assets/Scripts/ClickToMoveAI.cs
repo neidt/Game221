@@ -37,9 +37,10 @@ public class ClickToMoveAI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            DoDijkstra();
-        }
+           DoDijkstra();
+        } 
         UpdateAgentMovement();
+        
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             ResetWaypoints();
@@ -63,20 +64,6 @@ public class ClickToMoveAI : MonoBehaviour
                 }
             }
         }
-        //for (int i = 0; i < waypointNumberEnd; i++)
-        //{
-        //    ////if we aren't at a waypoint and not at the end of the waypoint list, move to current waypoint
-        //    //if (Vector3.Distance(playerPos, waypointList[waypointNumber]) > .3f && waypointNumber <= waypointNumberEnd)
-        //    //{
-        //    //    transform.position = Vector3.MoveTowards(playerPos, waypointList[waypointNumber], step);
-        //    //}
-        //    ////else if we are at a waypoint, set waypointList[waypointNum] to the next waypoint
-        //    //else if (Vector3.Distance(playerPos, waypointList[waypointNumber]) < .3f && waypointNumber <= waypointNumberEnd)
-        //    //{
-        //    //    waypointNumber++;
-        //    //}
-        //    ////else we are at the end of the waypoint list, so stop moving?
-        //}
     }
 
     private void DoDijkstra()
@@ -92,6 +79,7 @@ public class ClickToMoveAI : MonoBehaviour
     {
         print("resetting");
         waypointNumber = 0;
+        AIStartNode = endNode;
         waypointList.Clear();
     }
 }

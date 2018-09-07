@@ -12,6 +12,7 @@ public class ReportIfClicked : MonoBehaviour
     void Start()
     {
         ai = GameObject.FindGameObjectWithTag("Player").GetComponent<ClickToMoveAI>();
+
     }
 
     // Update is called once per frame
@@ -32,7 +33,7 @@ public class ReportIfClicked : MonoBehaviour
                 }
             }
         }
-        //if rightclicking, set object to an obstacle
+        //if rightclicking, set object to an obstacle??
         if (Input.GetMouseButtonDown(1))
         {
             RaycastHit info;
@@ -40,7 +41,14 @@ public class ReportIfClicked : MonoBehaviour
             {
                 if (info.transform == this.transform)
                 {
+                    //disable the current object and enable an obstacle object in its place
+                    //also remove the area from the node list, as it isn't connected anymore
+                    generatedTiles.obstacleTile.transform.position = info.transform.position;
+                    Instantiate(generatedTiles.obstacleTile, info.transform);
+                    generatedTiles.tiles.Remove(this.gameObject);
+                    generatedTiles.tilesToNode.Remove(this.gameObject);
                     
+
                 }
             }
         }
