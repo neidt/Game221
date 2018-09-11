@@ -10,6 +10,10 @@ public class TilesByGeneration : MonoBehaviour
     //tiles
     public GameObject tileTemplate;
     public GameObject obstacleTile;
+    public bool isAnObstacle;
+    public Material tileMat;
+    public Material obstacleMat;
+
 
     //other stuff
     public GameObject player;
@@ -41,7 +45,7 @@ public class TilesByGeneration : MonoBehaviour
                 GameObject newTile = GameObject.Instantiate(tileTemplate);
 
                 newTile.transform.position = new Vector3(x, 0, z);
-
+                
                 Node tileNode = new Node(newTile.transform.position);
                 if (z == 0 && x == 0)
                 {
@@ -67,13 +71,13 @@ public class TilesByGeneration : MonoBehaviour
             //Debug.Log("weighted conns: " + weightedConnections.Count);
 
             Node right = LookupNode(nodesByPosition, currentNode.position + Vector3.right);
-            if (right != null)
+            if (right != null && !isAnObstacle)
             {
                 weightedConnections.Add(right, 1);
             }
-            else
+            else if (isAnObstacle)
             {
-                Debug.Log("right node is null!");
+                weightedConnections.Add(right, -1);
             }
 
             Node left = LookupNode(nodesByPosition, currentNode.position + Vector3.left);
@@ -81,9 +85,9 @@ public class TilesByGeneration : MonoBehaviour
             {
                 weightedConnections.Add(left, 1);
             }
-            else
+            else if (isAnObstacle)
             {
-                Debug.Log("left node is null!");
+                weightedConnections.Add(left, -1);
             }
 
             Node up = LookupNode(nodesByPosition, currentNode.position + Vector3.forward);
@@ -91,9 +95,9 @@ public class TilesByGeneration : MonoBehaviour
             {
                 weightedConnections.Add(up, 1);
             }
-            else
+            else if (isAnObstacle)
             {
-                Debug.Log("up node is null!");
+                weightedConnections.Add(up, -1);
             }
 
             Node down = LookupNode(nodesByPosition, currentNode.position + Vector3.back);
@@ -101,9 +105,9 @@ public class TilesByGeneration : MonoBehaviour
             {
                 weightedConnections.Add(down, 1);
             }
-            else
+            else if (isAnObstacle)
             {
-                Debug.Log("down node is null!");
+                weightedConnections.Add(down, -1);
             }
         }
     }
@@ -117,6 +121,19 @@ public class TilesByGeneration : MonoBehaviour
         return nodes[lookup];
     }
 
+    public void changeToObstacle(GameObject obj)
+    {
+        //if changing to an obstacle, set isAnObstacle to true,
+        //disable tile and instantiate an obstacle in its place
+        isAnObstacle = true;
+        obj.GetComponent<MeshRenderer>().material = obstacleMat;
+    }
+
+    public void changeToTile(GameObject obj)
+    {
+        isAnObstacle = false;
+        obj.GetComponent<MeshRenderer>().material = tileMat;
+    }
     // Update is called once per frame
     void Update()
     {

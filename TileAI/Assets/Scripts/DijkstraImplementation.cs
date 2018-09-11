@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DijkstraImplementation
-{ 
+{
     public static List<Vector3> Pathfind(Node fromNode, Node toNode)
     {
         //Debug.Log("from node: " + fromNode.weightedConnections.Count);
@@ -29,7 +29,7 @@ public class DijkstraImplementation
             //Debug.Log("weighted connections: " + smallestCostSoFar.graphNode.weightedConnections.Count);
             foreach (Node connectedNode in smallestCostSoFar.graphNode.weightedConnections.Keys)
             {
-                //Debug.Log("into foreach");
+
                 if (!DoesListContainNode(connectedNode, closedList))
                 {
                     if (!DoesListContainNode(connectedNode, openList))
@@ -45,9 +45,12 @@ public class DijkstraImplementation
                         //is connection from the currently processing nod faster
                         //than the exitsting connection the this target node?
                         //if yes, update target node
-                        float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
 
-                        //a* is --> currentCostToTarget = pathfindingNodes[connectedNode].costSoFar + vector3.Distance(current node.pos, endnode.pos)
+                        //dijkstra
+                        //float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
+
+                        //a*
+                        float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar + Vector3.Distance(connectedNode.position, toNode.position);
 
                         float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
 
@@ -58,11 +61,11 @@ public class DijkstraImplementation
                         }
                     }
                 }
-            }
-            closedList.Add(smallestCostSoFar);
-            openList.Remove(smallestCostSoFar);
-        }//end while loop -pathfinding done
 
+                closedList.Add(smallestCostSoFar);
+                openList.Remove(smallestCostSoFar);
+            }//end while loop -pathfinding done
+        }
         //destination is on closed list
         //[predessocrs olao on closed list
         //Debug.Log("toNode: " + toNode.ToString());

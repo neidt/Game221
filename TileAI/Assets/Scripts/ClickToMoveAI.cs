@@ -20,11 +20,12 @@ public class ClickToMoveAI : MonoBehaviour
     ReportIfClicked clickedScript;
 
     //pathfinding stuffs
-    //public List<Vector3> clickedList = new List<Vector3>();
     public List<Vector3> waypointList;
     public Node AIStartNode;
     public Node endNode;
     public int waypointNumber = 0;
+    public bool userInputDetected;
+    public bool waypointListHasChanged;
 
     // Use this for initialization
     void Start()
@@ -35,16 +36,23 @@ public class ClickToMoveAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (userInputDetected == true)
         {
-           DoDijkstra();
-        } 
+            DoAStar();
+        }
         UpdateAgentMovement();
-        
+
+        //if the list of waypoints changes, redo a* pathfinding
+        if (waypointListHasChanged == true)
+        {
+            DoAStar();
+        }
+
+        /*
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             ResetWaypoints();
-        }
+        }*/
     }
 
     private void UpdateAgentMovement()
@@ -66,12 +74,12 @@ public class ClickToMoveAI : MonoBehaviour
         }
     }
 
-    private void DoDijkstra()
+    private void DoAStar()
     {
         //AIStartNode.position = playerPos;
-        print("ai start node: " + AIStartNode);
+        //print("ai start node: " + AIStartNode);
         //print("ai connections" + AIStartNode.weightedConnections.Count);
-        print("endnode: " + endNode);
+        //print("endnode: " + endNode);
         waypointList = DijkstraImplementation.Pathfind(AIStartNode, endNode);
     }
 
