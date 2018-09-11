@@ -8,7 +8,7 @@ public class ReportIfClicked : MonoBehaviour
     ClickToMoveAI ai;
     public GameObject endTile;
     bool mouseOrNah;
-    bool isAnObstacle;
+    public bool isAnObstacle;
 
     // Use this for initialization
     void Start()
@@ -22,22 +22,22 @@ public class ReportIfClicked : MonoBehaviour
     {
         if (ChooseInput.mouseOrNah == true)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                ai.userInputDetected = true;
-                RaycastHit info;
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out info))
-                {
-                    if (info.transform == this.transform)
-                    {
-                        //set node at the transform to the end node??
-                        endTile = this.gameObject;
-                        ai.endNode = generatedTiles.tilesToNode[endTile];
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    ai.userInputDetected = true;
+            //    RaycastHit info;
+            //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out info))
+            //    {
+            //        if (info.transform == this.transform)
+            //        {
+            //            //set node at the transform to the end node??
+            //            endTile = this.gameObject;
+            //            ai.endNode = generatedTiles.tilesToNode[endTile];
 
-                        print("setting end node to: " + ai.endNode.position);
-                    }
-                }
-            }
+            //            print("setting end node to: " + ai.endNode.position);
+            //        }
+            //    }
+            //}
             //if rightclicking, set object to an obstacle??
             if (Input.GetMouseButtonDown(1))
             {
@@ -46,22 +46,24 @@ public class ReportIfClicked : MonoBehaviour
                 {
                     if (info.transform == this.transform)
                     {
-                        if (!generatedTiles.isAnObstacle)
+                        if (!isAnObstacle)
                         {
                             //change to obstacle
-                            generatedTiles.changeToObstacle(this.gameObject);
-                            generatedTiles.isAnObstacle = true;
+                            //get mesh renderer here
+                            GetComponent<MeshRenderer>().material = generatedTiles.obstacleMat;
                             isAnObstacle = true;
                             //the waypoint list probably changed, so send that info to the ai
                             ai.waypointListHasChanged = true;
+                            generatedTiles.makeConnections();
                         }
                         else
                         {
-                            generatedTiles.changeToTile(this.gameObject);
-                            generatedTiles.isAnObstacle = false;
+                            GetComponent<MeshRenderer>().material = generatedTiles.tileMat;
                             ai.waypointListHasChanged = true;
                             isAnObstacle = false;
+                            generatedTiles.makeConnections();
                         }
+                        
                     }
                 }
             }

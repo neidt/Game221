@@ -10,7 +10,7 @@ public class TilesByGeneration : MonoBehaviour
     //tiles
     public GameObject tileTemplate;
     public GameObject obstacleTile;
-    public bool isAnObstacle;
+
     public Material tileMat;
     public Material obstacleMat;
 
@@ -18,13 +18,14 @@ public class TilesByGeneration : MonoBehaviour
     //other stuff
     public GameObject player;
     public Dictionary<GameObject, Node> tilesToNode = new Dictionary<GameObject, Node>();
+    public Dictionary<Node, GameObject> nodesToTile = new Dictionary<Node, GameObject>();
     public List<GameObject> tiles = new List<GameObject>();
     public List<Node> nodesList = new List<Node>();
     public Dictionary<Node, float> weightedConnections = new Dictionary<Node, float>();
     public Dictionary<Vector3, Node> nodesByPosition = new Dictionary<Vector3, Node>();
 
     ClickToMoveAI playerMoveScript;
-    ReportIfClicked tileScript;
+    //ReportIfClicked tileScript;
 
     // Use this for initialization
     void Start()
@@ -32,28 +33,28 @@ public class TilesByGeneration : MonoBehaviour
         Dictionary<Vector3, Node> nodesByPosition = new Dictionary<Vector3, Node>();
 
         GameObject playerObj = Instantiate(player, new Vector3(0, 0, 0), this.transform.rotation);
-
-        tileScript = this.gameObject.GetComponent<ReportIfClicked>();
+        
         playerMoveScript = playerObj.GetComponent<ClickToMoveAI>();
-        //clickScript = tileTemplate.GetComponent<ReportIfClicked>();
 
         for (int x = 0; x < gridWidth; x++)
         {
             for (int z = 0; z < gridHeight; z++)
             {
-
                 GameObject newTile = GameObject.Instantiate(tileTemplate);
 
                 newTile.transform.position = new Vector3(x, 0, z);
-                
+
                 Node tileNode = new Node(newTile.transform.position);
                 if (z == 0 && x == 0)
                 {
                     playerMoveScript.AIStartNode = tileNode;
                 }
+                
                 //print("Making node at: " + tileNode.position.ToString());
                 nodesByPosition.Add(tileNode.position, tileNode);
                 tilesToNode.Add(newTile, tileNode);
+
+                nodesToTile.Add(tileNode, newTile);
 
                 tiles.Add(newTile);
                 nodesList.Add(tileNode);
@@ -61,54 +62,59 @@ public class TilesByGeneration : MonoBehaviour
                 newTile.GetComponent<ReportIfClicked>().generatedTiles = this;
             }
         }
-
         //connections
+        makeConnections();
+    }
+
+    public void makeConnections()
+    {
         foreach (Vector3 nodePosition in nodesByPosition.Keys)
         {
-            //Debug.Log("tile gen nodesBypos: " + nodesByPosition.Count);
             Node currentNode = nodesByPosition[nodePosition];
+            weightedConnections.Clear();
             weightedConnections = currentNode.weightedConnections;
-            //Debug.Log("weighted conns: " + weightedConnections.Count);
+
+            GameObject obj = nodesToTile[currentNode];
+            ReportIfClicked tileScript;
+            tileScript = obj.GetComponent<ReportIfClicked>();
 
             Node right = LookupNode(nodesByPosition, currentNode.position + Vector3.right);
-            if (right != null && !isAnObstacle)
+            if (right != null)
             {
-                weightedConnections.Add(right, 1);
-            }
-            else if (isAnObstacle)
-            {
-                weightedConnections.Add(right, -1);
+                //if right isn't an obstacle, add it to the list
+                if (tileScript.isAnObstacle == false)
+                {
+                    weightedConnections.Add(right, 1);
+                }
             }
 
             Node left = LookupNode(nodesByPosition, currentNode.position + Vector3.left);
             if (left != null)
             {
-                weightedConnections.Add(left, 1);
-            }
-            else if (isAnObstacle)
-            {
-                weightedConnections.Add(left, -1);
+                if (tileScript.isAnObstacle == false)
+                {
+                    weightedConnections.Add(left, 1);
+                }
             }
 
             Node up = LookupNode(nodesByPosition, currentNode.position + Vector3.forward);
             if (up != null)
             {
-                weightedConnections.Add(up, 1);
-            }
-            else if (isAnObstacle)
-            {
-                weightedConnections.Add(up, -1);
+                if (tileScript.isAnObstacle == false)
+                {
+                    weightedConnections.Add(up, 1);
+                }
             }
 
             Node down = LookupNode(nodesByPosition, currentNode.position + Vector3.back);
             if (down != null)
             {
-                weightedConnections.Add(down, 1);
+                if (tileScript.isAnObstacle == false)
+                {
+                    weightedConnections.Add(down, 1);
+                }
             }
-            else if (isAnObstacle)
-            {
-                weightedConnections.Add(down, -1);
-            }
+
         }
     }
 
@@ -119,20 +125,6 @@ public class TilesByGeneration : MonoBehaviour
             return null;
         }
         return nodes[lookup];
-    }
-
-    public void changeToObstacle(GameObject obj)
-    {
-        //if changing to an obstacle, set isAnObstacle to true,
-        //disable tile and instantiate an obstacle in its place
-        isAnObstacle = true;
-        obj.GetComponent<MeshRenderer>().material = obstacleMat;
-    }
-
-    public void changeToTile(GameObject obj)
-    {
-        isAnObstacle = false;
-        obj.GetComponent<MeshRenderer>().material = tileMat;
     }
     // Update is called once per frame
     void Update()

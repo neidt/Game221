@@ -36,7 +36,6 @@ public class DijkstraImplementation
                     {
                         float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
                         PathFindingNode predecessor = smallestCostSoFar;
-                        //Debug.Log("adding node " + connectedNode);
                         pathfindingNodes.Add(connectedNode, new PathFindingNode(connectedNode, costToConnectedNode, predecessor));
                         openList.Add(pathfindingNodes[connectedNode]);
                     }

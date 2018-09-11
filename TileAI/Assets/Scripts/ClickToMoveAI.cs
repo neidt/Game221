@@ -36,10 +36,24 @@ public class ClickToMoveAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (userInputDetected == true)
+        if (Input.GetMouseButtonDown(0))
         {
-            DoAStar();
+            RaycastHit info;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out info))
+            {
+                //goal: hitsomething->what did u hit,is it a tile, if yes, do movement stuff
+                //info's tag is tile means you hit a tile, use tilesToNode to get node
+                //set that node to the destination node and do the a* using that node
+                //do a* in here
+
+
+                //clicking should make agent waypoints update and do continuous movement
+
+            }
         }
+
+        
+        
         UpdateAgentMovement();
 
         //if the list of waypoints changes, redo a* pathfinding
@@ -80,7 +94,8 @@ public class ClickToMoveAI : MonoBehaviour
         //print("ai start node: " + AIStartNode);
         //print("ai connections" + AIStartNode.weightedConnections.Count);
         //print("endnode: " + endNode);
-        waypointList = DijkstraImplementation.Pathfind(AIStartNode, endNode);
+        print("doing a*");
+        //waypointList = DijkstraImplementation.Pathfind(AIStartNode, endNode);
     }
 
     private void ResetWaypoints()
