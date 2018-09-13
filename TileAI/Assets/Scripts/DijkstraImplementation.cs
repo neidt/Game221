@@ -6,8 +6,8 @@ public class DijkstraImplementation
 {
     public static List<Vector3> Pathfind(Node fromNode, Node toNode)
     {
-        //Debug.Log("from node: " + fromNode.weightedConnections.Count);
-        //Debug.Log("tonode: " + toNode.weightedConnections.Count);
+        Debug.Log("from node: " + fromNode.weightedConnections.Count);
+        Debug.Log("tonode: " + toNode.weightedConnections.Count);
         List<Vector3> waypoints = new List<Vector3>();
 
         List<PathFindingNode> openList = new List<PathFindingNode>();
@@ -20,7 +20,7 @@ public class DijkstraImplementation
 
         while (openList.Count > 0 && !DoesListContainNode(toNode, closedList))
         {
-            //Debug.Log("into while loop");
+            Debug.Log("into while loop");
             //how do you know what the smallest cost-so-far is? ->
             openList.Sort();
             PathFindingNode smallestCostSoFar = openList[0];
@@ -29,7 +29,7 @@ public class DijkstraImplementation
             //Debug.Log("weighted connections: " + smallestCostSoFar.graphNode.weightedConnections.Count);
             foreach (Node connectedNode in smallestCostSoFar.graphNode.weightedConnections.Keys)
             {
-
+                Debug.Log("into foreach");
                 if (!DoesListContainNode(connectedNode, closedList))
                 {
                     if (!DoesListContainNode(connectedNode, openList))
@@ -128,7 +128,7 @@ public class Node
     {
         this.position = pos;
     }
-    public Vector3 position;
+    public Vector3 position { get; private set; }
     public Dictionary<Node, float> weightedConnections = new Dictionary<Node, float>();
     public override string ToString()
     {

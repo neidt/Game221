@@ -13,11 +13,12 @@ public class ClickToMoveAI : MonoBehaviour
     public float rayDistance = .1f;
 
     //in case we hit
-    private bool hitThisFrame = false;
-    private Vector3 hitLocThisFrame = Vector3.zero;
+    //private bool hitThisFrame = false;
+    //private Vector3 hitLocThisFrame = Vector3.zero;
 
     //other stuff
-    ReportIfClicked clickedScript;
+    //ReportIfClicked clickedScript;
+    TilesByGeneration tileGen;
 
     //pathfinding stuffs
     public List<Vector3> waypointList;
@@ -30,13 +31,14 @@ public class ClickToMoveAI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        clickedScript = GameObject.FindGameObjectWithTag("Tile").GetComponent<ReportIfClicked>();
+        //clickedScript = GameObject.FindGameObjectWithTag("Tile").GetComponent<ReportIfClicked>();
+        tileGen = GameObject.FindGameObjectWithTag("Generator").GetComponent<TilesByGeneration>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && ChooseInput.isMouseEnabled == true)
         {
             RaycastHit info;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out info))
@@ -45,28 +47,25 @@ public class ClickToMoveAI : MonoBehaviour
                 //info's tag is tile means you hit a tile, use tilesToNode to get node
                 //set that node to the destination node and do the a* using that node
                 //do a* in here
-
+                if (info.transform.tag == "Tile")
+                {
+                    Debug.Log("setting end point");
+                    endNode = tileGen.tilesToNode[info.transform.gameObject];
+                    print("Endpoint set, doing a*");
+                    DoAStar();
+                }
 
                 //clicking should make agent waypoints update and do continuous movement
+                //if the list of waypoints changes, redo a* pathfinding
 
             }
         }
-
-        
-        
-        UpdateAgentMovement();
-
-        //if the list of waypoints changes, redo a* pathfinding
         if (waypointListHasChanged == true)
         {
+            print("waypoints changed, redoing a*");
             DoAStar();
         }
-
-        /*
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            ResetWaypoints();
-        }*/
+        UpdateAgentMovement();
     }
 
     private void UpdateAgentMovement()
@@ -82,7 +81,8 @@ public class ClickToMoveAI : MonoBehaviour
                 if (waypointNumber == waypointList.Count)
                 {
                     ResetWaypoints();
-                    AIStartNode.position = playerPos;
+                    //AIStartNode.position = playerPos;
+                    AIStartNode = tileGen.nodesByPosition[playerPos];
                 }
             }
         }
@@ -92,10 +92,11 @@ public class ClickToMoveAI : MonoBehaviour
     {
         //AIStartNode.position = playerPos;
         //print("ai start node: " + AIStartNode);
-        //print("ai connections" + AIStartNode.weightedConnections.Count);
+        print("ai connections" + AIStartNode.weightedConnections.Count);
+        print("endnode connections: " + endNode.weightedConnections.Count);
         //print("endnode: " + endNode);
         print("doing a*");
-        //waypointList = DijkstraImplementation.Pathfind(AIStartNode, endNode);
+        waypointList = DijkstraImplementation.Pathfind(AIStartNode, endNode);
     }
 
     private void ResetWaypoints()

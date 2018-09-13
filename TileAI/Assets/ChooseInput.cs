@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChooseInput : MonoBehaviour
 {
-    public static bool mouseOrNah;
+    public static bool isMouseEnabled;
 
     // Use this for initialization
     void Start ()
@@ -20,6 +20,6 @@ public class ChooseInput : MonoBehaviour
     
     public void swapBool()
     {
-        mouseOrNah = !mouseOrNah;
+        isMouseEnabled = !isMouseEnabled;
     }
 }

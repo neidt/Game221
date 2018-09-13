@@ -7,38 +7,20 @@ public class ReportIfClicked : MonoBehaviour
     public TilesByGeneration generatedTiles;
     ClickToMoveAI ai;
     public GameObject endTile;
-    bool mouseOrNah;
+    bool isMouseEnabled;
     public bool isAnObstacle;
 
     // Use this for initialization
     void Start()
     {
         ai = GameObject.FindGameObjectWithTag("Player").GetComponent<ClickToMoveAI>();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ChooseInput.mouseOrNah == true)
+        if (ChooseInput.isMouseEnabled == true)
         {
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    ai.userInputDetected = true;
-            //    RaycastHit info;
-            //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out info))
-            //    {
-            //        if (info.transform == this.transform)
-            //        {
-            //            //set node at the transform to the end node??
-            //            endTile = this.gameObject;
-            //            ai.endNode = generatedTiles.tilesToNode[endTile];
-
-            //            print("setting end node to: " + ai.endNode.position);
-            //        }
-            //    }
-            //}
-            //if rightclicking, set object to an obstacle??
             if (Input.GetMouseButtonDown(1))
             {
                 RaycastHit info;
@@ -63,7 +45,6 @@ public class ReportIfClicked : MonoBehaviour
                             isAnObstacle = false;
                             generatedTiles.makeConnections();
                         }
-                        
                     }
                 }
             }
