@@ -13,7 +13,7 @@ public class TilesByGeneration : MonoBehaviour
 
     public Material tileMat;
     public Material obstacleMat;
-    
+
     //other stuff
     public GameObject player;
     public Dictionary<GameObject, Node> tilesToNode = new Dictionary<GameObject, Node>();
@@ -31,7 +31,7 @@ public class TilesByGeneration : MonoBehaviour
     {
 
         GameObject playerObj = Instantiate(player, new Vector3(0, 0, 0), this.transform.rotation);
-        
+
         playerMoveScript = playerObj.GetComponent<ClickToMoveAI>();
 
         for (int x = 0; x < gridWidth; x++)
@@ -43,13 +43,14 @@ public class TilesByGeneration : MonoBehaviour
                 newTile.transform.position = new Vector3(x, 0, z);
 
                 Node tileNode = new Node(newTile.transform.position);
+
                 if (z == 0 && x == 0)
                 {
                     playerMoveScript.AIStartNode = tileNode;
                 }
 
-                //print("Making node at: " + tileNode.position.ToString());
-                
+                print("Making node at: " + tileNode.position);
+
                 nodesByPosition.Add(tileNode.position, tileNode);
 
                 tilesToNode.Add(newTile, tileNode);
@@ -72,19 +73,25 @@ public class TilesByGeneration : MonoBehaviour
     public void makeConnections()
     {
         Debug.Log("into makingConnections");
-        //weightedConnections.Clear();
+        weightedConnections.Clear();
         //Debug.Log("NodesByPos.Keys.Count: " + nodesByPosition.Keys.Count);
-        
+
         foreach (Vector3 nodePosition in nodesByPosition.Keys)
         {
             Debug.Log("into connection foreach");
             Node currentNode = nodesByPosition[nodePosition];
-            weightedConnections.Clear();
+            //weightedConnections.Clear();
             weightedConnections = currentNode.weightedConnections;
             //Debug.Log(currentNode.weightedConnections.ToString());
             GameObject obj = nodesToTile[currentNode];
             ReportIfClicked tileScript;
             tileScript = obj.GetComponent<ReportIfClicked>();
+
+
+            //Node start = LookupNode(nodesByPosition, currentNode.position);
+            
+            //playerMoveScript.AIStartNode.weightedConnections.Add(start, 1);
+
 
             Node right = LookupNode(nodesByPosition, currentNode.position + Vector3.right);
             if (right != null)
@@ -93,6 +100,7 @@ public class TilesByGeneration : MonoBehaviour
                 if (tileScript.isAnObstacle == false)
                 {
                     //weightedConnections.Add(right, 1);
+                    Debug.Log("making connection to the right");
                     weightedConnections.Add(right, 1);
                 }
                 else
@@ -110,6 +118,7 @@ public class TilesByGeneration : MonoBehaviour
             {
                 if (tileScript.isAnObstacle == false)
                 {
+                    Debug.Log("making connection to the left");
                     weightedConnections.Add(left, 1);
                 }
                 else
@@ -127,6 +136,7 @@ public class TilesByGeneration : MonoBehaviour
             {
                 if (tileScript.isAnObstacle == false)
                 {
+                    Debug.Log("making connection to the up");
                     weightedConnections.Add(up, 1);
                 }
                 else
@@ -144,6 +154,7 @@ public class TilesByGeneration : MonoBehaviour
             {
                 if (tileScript.isAnObstacle == false)
                 {
+                    Debug.Log("making connection to the down");
                     weightedConnections.Add(down, 1);
                 }
                 else

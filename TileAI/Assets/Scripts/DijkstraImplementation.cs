@@ -34,7 +34,7 @@ public class DijkstraImplementation
                 {
                     if (!DoesListContainNode(connectedNode, openList))
                     {
-                        float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
+                        float costToConnectedNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode] + Vector3.Distance(connectedNode.position, toNode.position);
                         PathFindingNode predecessor = smallestCostSoFar;
                         pathfindingNodes.Add(connectedNode, new PathFindingNode(connectedNode, costToConnectedNode, predecessor));
                         openList.Add(pathfindingNodes[connectedNode]);
@@ -49,9 +49,10 @@ public class DijkstraImplementation
                         //float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
 
                         //a*
-                        float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar + Vector3.Distance(connectedNode.position, toNode.position);
+                        float currentCostToTarget = pathfindingNodes[connectedNode].costSoFar;
 
-                        float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
+                        //float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
+                        float costToTargetThroughCurrentNode = smallestCostSoFar.costSoFar + smallestCostSoFar.graphNode.weightedConnections[connectedNode];
 
                         if (costToTargetThroughCurrentNode < currentCostToTarget)
                         {

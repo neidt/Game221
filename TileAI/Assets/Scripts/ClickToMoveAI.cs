@@ -51,19 +51,19 @@ public class ClickToMoveAI : MonoBehaviour
                     Debug.Log("setting end point");
                     endNode = tileGen.tilesToNode[info.transform.gameObject];
                     print("Endpoint set, doing a*");
-                    //DoAStar();
+                    DoAStar();
                 }
 
                 //clicking should make agent waypoints update and do continuous movement
                 //if the list of waypoints changes, redo a* pathfinding
-
+                if (waypointListHasChanged == true)
+                {
+                    print("waypoints changed, redoing a*");
+                    DoAStar();
+                }
             }
         }
-        if (waypointListHasChanged == true)
-        {
-            print("waypoints changed, redoing a*");
-            //DoAStar();
-        }
+
         UpdateAgentMovement();
     }
 
