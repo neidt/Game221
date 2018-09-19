@@ -78,7 +78,7 @@ public class TilesByGeneration : MonoBehaviour
 
         foreach (Vector3 nodePosition in nodesByPosition.Keys)
         {
-            Debug.Log("into connection foreach");
+            //Debug.Log("into connection foreach");
             Node currentNode = nodesByPosition[nodePosition];
             //weightedConnections.Clear();
             weightedConnections = currentNode.weightedConnections;

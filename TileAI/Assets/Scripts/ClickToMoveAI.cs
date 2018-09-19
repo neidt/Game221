@@ -80,7 +80,7 @@ public class ClickToMoveAI : MonoBehaviour
                 if (waypointNumber == waypointList.Count)
                 {
                     ResetWaypoints();
-                    //AIStartNode.position = playerPos;
+                    
                     AIStartNode = tileGen.nodesByPosition[playerPos];
                 }
             }
